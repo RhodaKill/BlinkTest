@@ -11,3 +11,4 @@ What I would have added with more time:
 - The textfield could use better placement and multilined input (or if still single line allow the return button to mirror what the send button does)
 - The ability to save the new messages back to the JSON
 - Unit tests for the ViewModels
+- If an error happens when trying to add a new message to a conversation, display this to the User (instead of the current print)
