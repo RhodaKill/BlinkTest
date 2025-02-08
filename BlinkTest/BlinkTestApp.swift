@@ -9,7 +9,13 @@ import SwiftUI
 struct BlinkTestApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if isProduction {
+                ContentView()
+            }
         }
+    }
+    
+    private var isProduction: Bool {
+        NSClassFromString("XCTestCase") == nil
     }
 }
