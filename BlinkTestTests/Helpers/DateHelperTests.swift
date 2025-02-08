@@ -20,5 +20,14 @@ final class DateHelperTests {
         #expect(calendarDate.minute == 37)
         #expect(calendarDate.second == 18)
     }
+    
+    @Test("Date string from date correctly formats a date to a string")
+    func dateStringFromDate() {
+        let date = DateHelper.date(from: "2020-05-04T03:37:18")!
+        
+        let result = DateHelper.dateString(from: date)
+        
+        #expect(result == "03:37 - 4 May 2020")
+    }
 }
 
