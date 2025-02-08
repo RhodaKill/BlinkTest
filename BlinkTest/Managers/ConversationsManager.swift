@@ -15,16 +15,21 @@ actor ConversationsManager {
     }
     
     func fetchConversations() async throws {
+        guard conversations.isEmpty else { return } /// As we don't save yet, we don't want to "reload" and lose all our data when returning to the List view
         conversations = try dependencies.service.fetchConversations(from: "code_test_data")
     }
     
-    func addMessage(
-        _ messageText: String,
-        toConversationID conversationID: String
-    ) async throws {
-        if let index = conversations.firstIndex(where: { $0.id == conversationID }) {
-            let message = Message(id: dependencies.messageIDGenerator(), text: messageText, lastUpdated: Date())
+    func update(
+        conversation: Conversation,
+        with messageText: String
+    ) async throws -> Conversation
+    {
+        if let index = conversations.firstIndex(where: { $0.id == conversation.id }) {
+            let currentDate = Date()
+            conversations[index].lastUpdated = currentDate
+            let message = Message(id: dependencies.messageIDGenerator(), text: messageText, lastUpdated: currentDate)
             conversations[index].messages.append(message)
+            return conversations[index]
         } else {
             throw CustomError.conversationNotFound
         }

@@ -39,24 +39,26 @@ final class ConversationsManagerTests {
         await #expect(sut.conversations == expectedConversations)
     }
     
-    @Test("Add message adds a new message to the correct conversation")
-    func addMessage() async throws {
-        let converstionToUpdate = Conversation.example
+    @Test("Update conversation with Message updates the message and last updated date and stores the updated conversation")
+    func updateConversationWithMessage() async throws {
+        let converstionToUpdate = Conversation.example()
         service.fetchConversationsReturnValue = [converstionToUpdate]
         let expectedMessage = "Hello there!"
         
         try await sut.fetchConversations() /// Required to populate the conversations array
-        try await sut.addMessage(expectedMessage, toConversationID: converstionToUpdate.id)
+        let result = try await sut.update(conversation: converstionToUpdate, with: expectedMessage)
         
-        await #expect(sut.conversations.first?.messages.last?.text == expectedMessage)
+        #expect(result.messages.last?.text == expectedMessage)
+        #expect(result.messages.last?.lastUpdated == result.messages.last?.lastUpdated)
+        await #expect(sut.conversations.first == result)
     }
     
-    @Test("Add message throws error if no conversation with the provided ID is found")
-    func addMessageError() async throws {
+    @Test("Update conversation throws error if conversation is not found in the store")
+    func updateConversationWithMessageError() async throws {
         let expectedError = CustomError.conversationNotFound
         
         await #expect(throws: expectedError, performing: {
-            try await sut.addMessage("I have a bad feeling about this...", toConversationID: "ID")
+            _ = try await sut.update(conversation: Conversation.example(), with: "I have a bad feeling about this...")
         })
     }
 }
