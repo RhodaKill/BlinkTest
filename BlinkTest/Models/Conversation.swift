@@ -8,7 +8,7 @@ import Foundation
 struct Conversation {
     let id: String
     let name: String
-    let lastUpdated: Date
+    var lastUpdated: Date
     var messages: [Message]
 }
 
