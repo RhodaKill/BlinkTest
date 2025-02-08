@@ -32,3 +32,9 @@ extension Conversation: Codable {
 }
 
 extension Conversation: Equatable {}
+
+extension Conversation {
+    var sortedMessages: [Message] {
+        return messages.sorted { $0.lastUpdated < $1.lastUpdated }
+    }
+}
